@@ -2,7 +2,7 @@
 
 ## One virtual account per user, vault selected by reference metadata
 
-A per-vault DVA would make routing deposits simple but consumes provider-issued accounts quickly. Paystack businesses have a finite DVA allocation (commonly cited as a 1,000 account cap); creating multiple accounts per customer reaches that ceiling at a few hundred users. The demo therefore models one customer account and routes each confirmed charge using signed event metadata/reference mapping. Production must persist a server-created pending deposit reference and never trust arbitrary client-supplied vault metadata.
+A per-vault DVA would make routing deposits simple but consumes provider-issued accounts quickly. Paystack businesses have a 1,000 DVA allocation cap. At two or three vaults per customer, a per-vault design reaches that hard ceiling at roughly 300–500 customers. The demo therefore models one customer account and routes each confirmed charge using signed event metadata/reference mapping. Production must persist a server-created pending deposit reference and never trust arbitrary client-supplied vault metadata.
 
 ## Ledger rows are append-only credits
 
@@ -14,4 +14,5 @@ Database locks protect state transitions, not HTTP duration. A committed payout 
 
 ## Mock first, real adapter explicit
 
-The default provider has deterministic local DVA data and success/failure transfers. `PAYSTACK_MODE=real` selects an adapter that requires a secret but intentionally refuses unsupported provider operations until customer/recipient setup exists. This avoids pretending the demo can safely send live money.
+The default provider has deterministic local DVA data and success/failure transfers. `PAYSTACK_MODE=real` selects the HTTP adapter for customer/DVA provisioning. To keep the sample narrow, payouts use one operator-configured `PAYSTACK_RECIPIENT_CODE`; this is not a safe multi-user payout configuration and is not production-ready. No live credentials or recipient are included.
+
